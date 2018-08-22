@@ -14,6 +14,7 @@ namespace TestingControllersSample.Tests.UnitTests
 {
     public class SessionControllerTests
     {
+        #region snippet1
         [Fact]
         public async Task IndexReturnsARedirectToIndexHomeWhenIdIsNull()
         {
@@ -67,6 +68,7 @@ namespace TestingControllersSample.Tests.UnitTests
             Assert.Equal(2, model.DateCreated.Day);
             Assert.Equal(testSessionId, model.Id);
         }
+        #endregion
 
         private List<BrainstormSession> GetTestSessions()
         {

@@ -14,6 +14,7 @@ namespace TestingControllersSample.Tests.UnitTests
 {
     public class ApiIdeasControllerTests
     {
+        #region snippet_ApiIdeasControllerTests
         [Fact]
         public async Task Create_ReturnsBadRequest_GivenInvalidModel()
         {
@@ -117,6 +118,46 @@ namespace TestingControllersSample.Tests.UnitTests
             var idea = returnValue.FirstOrDefault();
             Assert.Equal("One", idea.Name);
         }
+        #endregion
+
+        #region snippet_ActionResult
+        [Fact]
+        public async Task ForSessionActionResult_ReturnsIdeasForSession()
+        {
+            // Arrange
+            int testSessionId = 123;
+            var mockRepo = new Mock<IBrainstormSessionRepository>();
+            mockRepo.Setup(repo => repo.GetByIdAsync(testSessionId)).Returns(Task.FromResult(GetTestSession()));
+            var controller = new IdeasController(mockRepo.Object);
+
+            // Act
+            var result = await controller.ForSessionActionResult(testSessionId);
+
+            // Assert
+            var actionResult = Assert.IsType<ActionResult<List<IdeaDTO>>>(result);
+            var returnValue = Assert.IsType<List<IdeaDTO>>(actionResult.Value);
+            var idea = returnValue.FirstOrDefault();
+            Assert.Equal("One", idea.Name);
+        }
+        #endregion
+
+        #region snippet_ActionResultNotFoundObjectResult
+        [Fact]
+        public async Task ForSessionActionResult_ReturnsNotFoundObjectResultForNonexistentSession()
+        {
+            // Arrange
+            var mockRepo = new Mock<IBrainstormSessionRepository>();
+            var controller = new IdeasController(mockRepo.Object);
+            var nonExistentSessionId = 999;
+
+            // Act
+            var result = await controller.ForSessionActionResult(nonExistentSessionId);
+
+            // Assert
+            var actionResult = Assert.IsType<ActionResult<List<IdeaDTO>>>(result);
+            Assert.IsType<NotFoundObjectResult>(actionResult.Result);
+        }
+        #endregion
 
         private BrainstormSession GetTestSession()
         {

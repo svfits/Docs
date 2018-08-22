@@ -5,6 +5,7 @@ using TestingControllersSample.ViewModels;
 
 namespace TestingControllersSample.Controllers
 {
+    #region snippet1
     public class SessionController : Controller
     {
         private readonly IBrainstormSessionRepository _sessionRepository;
@@ -37,4 +38,5 @@ namespace TestingControllersSample.Controllers
             return View(viewModel);
         }
     }
+    #endregion
 }
